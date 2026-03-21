@@ -1,0 +1,13 @@
+{
+  "name": "recipe-management",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "dev:server": "bun run --filter @recipe-mgmt/server dev",
+    "dev:client": "bun run --filter @recipe-mgmt/client dev",
+    "dev": "bun run dev:server & bun run dev:client",
+    "test": "bun run --filter '*' test",
+    "test:server": "bun run --filter @recipe-mgmt/server test",
+    "test:e2e": "bun run --filter @recipe-mgmt/e2e test"
+  }
+}

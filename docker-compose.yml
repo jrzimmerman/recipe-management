@@ -1,0 +1,35 @@
+# Recipe Management — Docker Compose
+#
+# Single-service deployment appropriate for kitchen nodes.
+# SQLite data persisted via named volume.
+#
+# Usage:
+#   docker compose up --build      # build and run
+#   docker compose up -d           # run in background
+#   docker compose down            # stop
+#   docker compose down -v         # stop and remove data volume
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT:-3000}:3000"
+    volumes:
+      - recipe-data:/usr/src/app/data
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DB_PATH=/usr/src/app/data/recipe-management.db
+    restart: unless-stopped
+    # Resource constraints appropriate for SoM/edge devices
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: "1.0"
+
+volumes:
+  recipe-data:
+    driver: local
