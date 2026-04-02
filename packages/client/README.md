@@ -58,25 +58,32 @@ UI buttons (New Recipe, Edit, Delete) are shown/hidden based on the signed-in us
 
 ```
 src/
-├── main.tsx                # Entry point (React root)
-├── App.tsx                 # Main app with view routing
+├── main.tsx                # Entry point (React root + QueryClientProvider)
+├── App.tsx                 # Composition root — wires hooks to pages, manages navigation
 ├── index.css               # Kitchen-friendly global styles
 ├── api/
-│   └── client.ts           # Typed fetch wrapper, organization-aware
+│   └── client.ts           # Typed fetch wrapper, session management
 ├── hooks/
 │   ├── useRecipes.ts       # TanStack Query hooks for list, detail, search, mutations
 │   └── useDebounce.ts      # Generic debounce hook for search input
-└── components/
+├── pages/                  # Screen-level views (one per route/view)
+│   ├── LoginPage.tsx        # Auth gate with demo user cards per organization
+│   ├── RecipeListPage.tsx   # Toolbar + search + recipe card grid
+│   ├── RecipeDetailPage.tsx # Full recipe view + delete confirmation modal
+│   ├── RecipeCreatePage.tsx # New recipe form
+│   └── RecipeEditPage.tsx   # Edit recipe form with pre-filled data
+└── components/             # Reusable UI pieces (not tied to a specific page)
     ├── Layout.tsx           # Header + main content wrapper
-    ├── LoginScreen.tsx      # Auth gate with demo user cards per org
     ├── UserMenu.tsx         # Top-right dropdown (user name, org, sign out)
-    ├── ConfirmModal.tsx     # Reusable confirmation dialog for destructive actions
-    ├── SearchBar.tsx        # Recipe/ingredient search (controlled)
+    ├── ConfirmModal.tsx     # Confirmation dialog for destructive actions
+    ├── SearchBar.tsx        # Debounced search input (controlled)
     ├── RecipeList.tsx       # Grid of recipe cards with retry on error
-    ├── RecipeCard.tsx       # Summary card (name, yield, counts — no destructive actions)
-    ├── RecipeDetail.tsx     # Full recipe view with RBAC-gated edit/delete
-    └── RecipeForm.tsx       # Create/edit form with dynamic rows
+    ├── RecipeCard.tsx       # Summary card (name, yield, counts)
+    ├── RecipeDetail.tsx     # Ingredients + instructions with RBAC-gated actions
+    └── RecipeForm.tsx       # Create/edit form with dynamic ingredient/instruction rows
 ```
+
+**Pages vs. Components:** Pages compose components into screen-specific layouts. A page knows which components to arrange and what data to pass them, but contains no reusable UI logic. Components are generic building blocks — `RecipeCard` doesn't know if it's on the list page or a search results page. This separation keeps components reusable and pages easy to understand at a glance.
 
 ## UI Design Principles
 

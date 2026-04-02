@@ -86,11 +86,11 @@ const ROLE_LABELS: Record<UserRole, string> = {
   viewer: "View only",
 };
 
-interface LoginScreenProps {
+interface LoginPageProps {
   onLogin: (session: Session) => void;
 }
 
-export function LoginScreen({ onLogin }: LoginScreenProps) {
+export function LoginPage({ onLogin }: LoginPageProps) {
   const handleSelect = (user: DemoUser) => {
     onLogin({
       orgId: user.orgId,
